@@ -1,0 +1,97 @@
+{% extends '_partials/base.html' %}
+{% block title %}Home{% endblock %}
+{% load static %}
+
+{% block content %}
+
+<style>
+    /* Reduce spacing around the container */
+    .task-container {
+        margin: 10px auto; /* ✅ Reduces margin */
+        padding: 5px; /* ✅ Shrinks padding */
+        width: 95%; /* ✅ Expands width to use more space */
+    }
+
+    /* Adjust table layout */
+    .task-table {
+        table-layout: fixed;
+        width: 100%;
+        margin: 0; /* ✅ Removes extra margin */
+        padding: 0; /* ✅ Shrinks padding */
+        border-collapse: collapse; /* ✅ Removes spacing between cells */
+    }
+
+    /* Reduce padding in table cells */
+    .task-table th, .task-table td {
+        padding: 5px !important; /* ✅ Makes table more compact */
+    }
+</style>
+
+<div class="ui container task-container">
+    <h1 class="ui header" style="color: #2575fc;">My Tasks</h1>
+    {% include '_partials/messages.html' %}
+    <form action="{% url 'create-todo' %}" method="get">
+    <button type="submit" class="ui primary button">Create Todo</button>
+</form>
+    {% if todos %}
+    <table class="ui celled striped table task-table">
+        <thead>
+            <tr>
+                <th>Task</th>
+                <th>Description</th>
+                <th>Assigned To</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for todo in todos %}
+            <tr>
+                <td>{{ todo.title }}</td>
+                <td>{{ todo.description }}</td>
+                <td>
+                    {% for user in todo.assigned_users.all %}
+                        {{ user.get_full_name|default:user.username }}{% if not forloop.last %}, {% endif %}
+                    {% empty %}
+                        <em>No users assigned</em>
+                    {% endfor %}
+                </td>
+                <td>
+                    {% if todo.due_date %}
+                        {{ todo.due_date|date:"F j, Y" }}
+                    {% else %}
+                        <em>No due date set</em>
+                    {% endif %}
+                </td>
+                <td>
+                    <span class="ui {% if todo.is_completed %}green{% else %}orange{% endif %} label">
+                        {% if todo.is_completed %}Completed{% else %}Pending{% endif %}
+                    </span>
+                </td>
+                <td>
+                    <a href="{% url 'todo-detail' todo.pk %}" class="ui icon tiny button blue">
+                        <i class="eye icon"></i>
+                    </a>
+                    <a href="{% url 'todo-edit' todo.pk %}" class="ui icon tiny button yellow">
+                        <i class="pencil icon"></i>
+                    </a>
+                    <a href="{% url 'todo-delete' todo.id %}" class="ui icon tiny button red">
+                        <i class="trash icon"></i>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="ui warning message">
+        <div class="header">No tasks found</div>
+        <p>You have no tasks assigned or created.</p>
+        <p>
+            <a href="{% url 'create-todo' %}" class="ui button primary">Create a New Task</a>
+        </p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

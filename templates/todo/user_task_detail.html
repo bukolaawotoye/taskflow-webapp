@@ -1,0 +1,47 @@
+{% extends "_partials/base.html" %}
+{% block title %}Task Details{% endblock %}
+{% block content %}
+
+<div class="ui container" style="max-width: 700px; margin-top: 40px;">
+    <div class="ui raised segment" style="padding: 30px; border-radius: 10px;">
+        <h2 class="ui header" style="color: #2575fc;">
+            <i class="tasks icon"></i>
+            <div class="content">Task Details</div>
+        </h2>
+
+        <div class="ui divided list">
+            <div class="item">
+                <strong>Task Name:</strong> {{ task.title }}
+            </div>
+            <div class="item">
+                <strong>Due Date:</strong>
+                {% if task.due_date %}
+                    <span class="ui label blue">{{ task.due_date|date:"F j, Y" }}</span>
+                {% else %}
+                    <em>No due date set</em>
+                {% endif %}
+            </div>
+            <div class="item">
+                <strong>Description:</strong> {{ task.description }}
+            </div>
+            <div class="item">
+                <strong>Assigned Users:</strong>
+                <ul class="ui list">
+                    {% for user in task.assigned_users.all %}
+                        <li>{{ user.get_full_name|default:user.username }}</li>
+                    {% empty %}
+                        <li><em>No users assigned</em></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <a href="{% url 'user-tasks' %}" class="ui button red" style="border-radius: 8px;">
+                <i class="arrow left icon"></i> Back to My Tasks
+            </a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

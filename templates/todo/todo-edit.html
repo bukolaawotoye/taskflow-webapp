@@ -1,0 +1,30 @@
+{% extends '_partials/base.html' %}
+{% block title %}Edit Todo{% endblock %}
+
+{% block content %}
+<div class="ui container" style="max-width: 600px; margin-top: 40px;">
+    <div class="ui raised segment" style="padding: 30px; border-radius: 10px;">
+        <h2 class="ui header" style="color: #2575fc;">
+            <i class="edit icon"></i>
+            <div class="content">Edit Todo</div>
+        </h2>
+
+        <form class="ui form" method="POST" action="{% url 'todo-edit' todo.id %}">
+            {% csrf_token %}
+
+            <div class="ui stacked segment" style="border: 2px solid #a2c3ea; border-radius: 10px;">
+                {{ form.as_p }}  <!-- ✅ Preserves form structure -->
+                <button type="submit" class="ui fluid button blue" style="border-radius: 8px;">
+                    <i class="save icon"></i> Save Changes
+                </button>
+            </div>
+        </form>
+
+        <div style="margin-top: 20px;">
+            <a href="{% url 'home' %}" class="ui button red" style="border-radius: 8px;">
+                <i class="arrow left icon"></i> Cancel
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

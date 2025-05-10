@@ -1,0 +1,35 @@
+{% extends "_partials/base.html" %}
+{% block title %}Edit Task Status{% endblock %}
+{% block content %}
+
+<div class="ui container" style="max-width: 600px; margin-top: 40px;">
+    <div class="ui raised segment" style="padding: 30px; border-radius: 10px;">
+        <h2 class="ui header" style="color: #2575fc;">
+            <i class="clipboard check icon"></i>
+            <div class="content">Edit Task Status</div>
+        </h2>
+
+        <p><strong>Task:</strong> {{ task.title }}</p>
+        <p><strong>Description:</strong> {{ task.description }}</p>
+
+        <form method="POST" class="ui form">
+            {% csrf_token %}
+            
+            <div class="field">
+                <label for="status">Status:</label>
+                <select name="status" id="status" class="ui dropdown">
+                    <option value="pending" {% if not task.is_completed %}selected{% endif %}>Pending</option>
+                    <option value="completed" {% if task.is_completed %}selected{% endif %}>Completed</option>
+                </select>
+            </div>
+
+            <button type="submit" class="ui fluid button blue" style="border-radius: 8px;">Update Status</button>
+        </form>
+
+        <div style="margin-top: 20px;">
+            <a href="{% url 'user-tasks' %}" class="ui button red" style="border-radius: 8px;">Cancel</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

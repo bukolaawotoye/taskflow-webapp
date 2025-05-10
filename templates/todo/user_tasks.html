@@ -1,0 +1,68 @@
+{% extends '_partials/base.html' %}
+{% block title %}
+User Tasks
+{% endblock %}
+{% load static %}
+
+{% block content %}
+    <div class="ui container">
+        <h1 class="ui header" style="margin-top: 20px; color: #2575fc;">My Assigned Tasks</h1>
+        {% include '_partials/messages.html' %}
+
+        {% if tasks %}
+        <table class="ui celled striped table">
+            <thead>
+                <tr>
+                    <th>Task</th>
+                    <th>Description</th>
+                    <th>Assigned To</th>
+                    <th>Due Date</th> <!-- ✅ Added due date -->
+                    <th>Status</th>
+                    <th>Actions</th> <!-- ✅ Users can only view or edit -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                <tr>
+                    <td>{{ task.title }}</td>
+                    <td>{{ task.description }}</td>
+                    <td>
+                        {% for user in task.assigned_users.all %}
+                            {{ user.get_full_name|default:user.username }}{% if not forloop.last %}, {% endif %}
+                        {% empty %}
+                            <em>No users assigned</em>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% if task.due_date %}
+                            {{ task.due_date|date:"F j, Y" }} <!-- ✅ Formats due date -->
+                        {% else %}
+                            <em>No due date set</em>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="ui {% if task.is_completed %}green{% else %}orange{% endif %} label">
+                            {% if task.is_completed %}Completed{% else %}Pending{% endif %}
+                        </span>
+                    </td>
+                    <td>
+                        <!-- ✅ Users can only view and edit tasks -->
+                        <a href="{% url 'user-task-detail' task.pk %}" class="ui icon button">
+                            <i class="eye icon"></i>
+                        </a>
+                        <a href="{% url 'edit-user' task.pk %}" class="ui icon button">
+                            <i class="pencil icon"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="ui warning message">
+            <div class="header">No tasks assigned to you</div>
+            <p>You currently have no assigned tasks.</p>
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends '_partials/base.html' %}
+{% block title %}Create Todo{% endblock %}
+{% load static %}
+
+{% block content %}
+
+
+<div class="ui container todo-container">
+    <div class="ui raised segment todo-segment">
+        <h2 class="ui header" style="color: #2575fc;">
+            <i class="tasks icon"></i>
+            <div class="content">Create a New Todo</div>
+        </h2>
+
+        {% include '_partials/messages.html' %}
+
+        <form class="ui form todo-form" method="POST" action="{% url 'create-todo' %}">
+            {% csrf_token %}
+
+            <div class="field todo-field">
+                <label for="title"><strong>Title</strong></label>
+                {{ form.title }}
+            </div>
+
+            <div class="field todo-field">
+                <label for="description"><strong>Description</strong></label>
+                {{ form.description }}
+            </div>
+
+            <div class="field todo-field">
+                <label for="due_date"><strong>Due Date</strong></label>
+                {{ form.due_date }}
+            </div>
+
+            <div class="field todo-field">
+                <label for="assigned_users"><strong>Assign To</strong></label>
+                {{ form.assigned_users }}
+            </div>
+
+            <button type="submit" class="ui fluid button btn-submit">
+                <i class="check circle icon"></i> Submit
+            </button>
+        </form>
+
+        <div class="ui divider"></div>
+
+        <a href="{% url 'home' %}" class="ui button btn-cancel">
+            <i class="arrow left icon"></i> Cancel
+        </a>
+    </div>
+</div>
+{% endblock %}

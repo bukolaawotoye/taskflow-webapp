@@ -1,0 +1,66 @@
+{% extends '_partials/base.html' %}
+{% block title %}
+Register
+{% endblock %}
+{% load static %}
+
+{% block content %}
+<div class="ui grid" style="background-color: #f0cde7; padding: 30px;">
+    <div class="four wide column"></div>
+    <div class="eight wide column">
+      <div class="ui middle aligned center aligned grid">
+        <div class="column mt-5">
+          <h2 class="ui pink image header">
+            <img src="{% static 'img/Logo.png' %}" class="image" />
+            <div class="content" style="color: #D81B60;">Registration</div>
+          </h2>
+  
+            {% include '_partials/messages.html' %}
+  
+          <form class="ui large form" method="post" action= {% url 'register' %} style="background-color: #FFD1DC; padding: 20px; border-radius: 10px;">
+            {% csrf_token %}
+            <div class="ui stacked segment" style="border: 2px solid #D81B60;">
+              <div class="field">
+                <div class="ui left icon input">
+                  <i class="user icon" style="color: #D81B60;"></i>
+                  <input type="text" name="username" value="{{data.username}}" placeholder="Username" />
+                </div>
+              </div>
+  
+              <div class="field">
+                <div class="ui left icon input">
+                  <i class="user icon" style="color: #D81B60;"></i>
+                  <input type="text" name="email" value="{{data.email}}" placeholder="E-mail address" />
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui left icon input">
+                  <i class="user icon" style="color: #D81B60;"></i>
+                  <input type="text" name="role" value="{{data.role}}" placeholder="Admin/User" />
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui left icon input">
+                  <i class="lock icon" style="color: #D81B60;"></i>
+                  <input type="password" name="password" placeholder="Password" />
+                </div>
+              </div>
+  
+              <div class="field">
+                <div class="ui left icon input">
+                  <i class="lock icon" style="color: #D81B60;"></i>
+                  <input type="password" name="password2" placeholder="Repeat Password" />
+                </div>
+              </div>
+              <button class="ui fluid large button" style="background-color: #D81B60; color: white;">Submit</button>
+            </div>
+  
+          </form>
+  
+          <div class="ui message" style="background-color: #ff66ad; color: #171616;">Have an account? <a href= {% url 'login' %} style="color: #060606;">Login</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="four wide column"></div>
+</div>
+{% endblock content %}

@@ -1,0 +1,68 @@
+{% extends '_partials/base.html' %}
+{% load static %}
+
+{% block title %}
+    Todo: {{ todo.title }}
+{% endblock %}
+
+{% block content %}
+<div class="ui container" style="max-width: 700px; margin-top: 40px;">
+    <div class="ui raised segment" style="padding: 30px; border-radius: 10px;">
+        <h2 class="ui header" style="color: #2575fc;">
+            <i class="clipboard list icon"></i>
+            <div class="content">Todo Detail</div>
+        </h2>
+
+        {% include '_partials/messages.html' %}
+
+        <div class="ui segment">
+            <h1 class="ui header">{{ todo.title }}</h1>
+
+            <p><strong>Due Date:</strong> 
+                {% if todo.due_date %}
+                    <span class="ui label blue">{{ todo.due_date|date:"F j, Y" }}</span>
+                {% else %}
+                    <em>No due date set</em>
+                {% endif %}
+            </p>
+
+            <p><strong>Description:</strong> {{ todo.description }}</p>
+
+            <div class="ui divider"></div>
+
+            <h4>Assigned Users</h4>
+            <ul class="ui list">
+                {% for user in todo.assigned_users.all %}
+                    <li>{{ user.get_full_name|default:user.username }}</li>
+                {% empty %}
+                    <li><em>No users assigned</em></li>
+                {% endfor %}
+            </ul>
+
+            <div class="ui divider"></div>
+
+            <p><strong>Status:</strong> 
+                {% if todo.is_completed %}
+                    <span class="ui label green"><i class="check icon"></i> Completed</span>
+                {% else %}
+                    <span class="ui label orange"><i class="clock outline icon"></i> Pending</span>
+                {% endif %}
+            </p>
+
+            <div class="ui divider"></div>
+
+            <div class="ui buttons">
+                <a href="{% url 'todo-edit' todo.id %}" class="ui button blue">
+                    <i class="pencil icon"></i> Edit
+                </a>
+                <a href="{% url 'todo-delete' todo.id %}" class="ui button red">
+                    <i class="trash icon"></i> Delete
+                </a>
+                <a href="{% url 'home' %}" class="ui button">
+                    <i class="arrow left icon"></i> Back to Home
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
